@@ -1,0 +1,16 @@
+{% extends "truckregister/base.html" %}
+{% block content %}
+
+
+<form action="{% url 'truckregister:truck' truck.id %}" method = "POST">
+    {% csrf_token %}
+    <fieldset>
+        	<legend>
+                <h1> {{truck.trucklicensenumber}}</h1>
+                <input type="text" name="odometer" id=truck{{truck.trucklicensenumber}} >
+                <label for=truck{{truck.trucklicensenumber}}>{{truck.brand}}{{truck.model}} {{truck.trucklicensenumber}}</label>
+            </legend>
+    </fieldset>
+    <button type="submit" value="Accept" class= "btn btn-secondary">Save</button>
+
+{% endblock  %}

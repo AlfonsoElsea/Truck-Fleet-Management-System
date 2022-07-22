@@ -1,0 +1,15 @@
+{% extends "truckregister/base.html" %}
+{% load static%}
+{% block content %}
+   <br>
+   <h1>Update Odometer Reading</h1>
+    <br>
+    <div class="form-group" >
+    <form method="post" action="{% url 'truckregister:index' %}"  >
+        {% csrf_token %}
+        <img class="d-inline-block align-text-top" src="{% static 'truckregister/images/odometer.png' %}" float="left" height="50" width="50">
+        {{ form.as_p }}
+        <button type="submit" value="Save" class="btn btn-secondary">Save</button>
+    </form>
+    </div>
+{% endblock content %}

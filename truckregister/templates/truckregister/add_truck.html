@@ -1,0 +1,19 @@
+{% extends "truckregister/base.html" %}
+{% load static%}
+{% block content %}
+
+
+
+{% if submitted %}
+<p>Truck added</p>
+{% else %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" name="Submit">
+    </form>
+{% endif %}
+
+
+{% endblock %}

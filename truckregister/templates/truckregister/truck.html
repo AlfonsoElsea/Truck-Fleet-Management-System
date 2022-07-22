@@ -1,0 +1,10 @@
+<h1>Truck status</h1>
+<p>Brand: {{truck.brand}}</p>
+<p>Odometer: {{truck.milesodometer}}</p>
+{% if truck.needs_maintenance %}
+    <p> Needs maintenance</p>
+{% else %}
+    <p> No need maintenance yet</p>
+{% endif %}
+   
+
