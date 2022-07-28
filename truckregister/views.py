@@ -1,52 +1,62 @@
-from ast import If
-from msilib.schema import ListView
-from multiprocessing import context
-from re import sub
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from requests import request
-from .models import Truck, Driver
+from .models import Truck, Driver, addNewColumnInDB, createFieldForNewColumn, getFieldTypesList, getModelbyName, updateModels
 from django.views import generic
-from django.db.models import F
 from django.views.generic.edit import CreateView, DeleteView, UpdateView,FormView
-from .forms import  TruckForm
+from .forms import  DriverForm, TruckForm, recordDriverForm, recordTruckForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url='login'
     template_name = 'truckregister/home.html'
     context_object_name = 'list_of_trucks'
     
+    updateModels()
+
+
     def get_context_data(self, **kwargs):
         context = super(generic.ListView, self).get_context_data(**kwargs)
         context['drivers_objects'] = Driver.objects.all()
+        truckform=TruckForm()
+        driverForm=DriverForm()
+        context['truckform']=truckform
+        context['driverForm']=driverForm
+
         return context
     
 
     def get_queryset(self) :
         return Truck.objects.all()
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin,generic.DetailView):
+    login_url='login'
+
     model= Truck
     template_name = 'truckregister/truckdetails.html'
 
+@login_required(login_url='login')
 def TruckView(request, truck_id): 
-  
+    
     Truck.objects.filter(pk=truck_id)
     
     # truck.update(milesodometer=miles+int(odometer))
     return HttpResponseRedirect(reverse('truckregister:truck',args=(truck_id,)))
 
-class TruckUpdateView(CreateView):
+class TruckUpdateView(LoginRequiredMixin,CreateView):
+    login_url='login'
+
     model = Truck
     form_class = TruckForm
     template_name = "truckregister/truck_form.html"
     
-
+@login_required(login_url='login')
 def ProvidersView(request):
     return  render(request, "truckregister/providers.html")
 
+@login_required(login_url='login')
 def addTruckView(request):
     form=TruckForm()
     
@@ -63,8 +73,10 @@ def addTruckView(request):
     
     return render (request, 'truckregister/add_truck.html',context)
 
+@login_required(login_url='login')
 def updateTruckView(request, pk):
-
+            trucks = Truck.objects.all()
+            context={'list_of_trucks':trucks}
             if request.method == 'POST':
                 brand=request.POST.get('brand')
                 model=request.POST.get('model')
@@ -83,60 +95,103 @@ def updateTruckView(request, pk):
                 odometer=odometer,
                 miles_for_maintenance= maintenance)
                 truck.save()
-                trucks = Truck.objects.all()
-                context={'list_of_trucks':trucks}
+               
                 return redirect('truckregister:index')
-            return redirect(request,'truckregister/home.html')
+            return redirect(request,'truckregister/home.html', context)
 
-            # truck = Truck.objects.get(id=pk)
-            # form = TruckForm(instance=truck)
-            # if request.method=='POST':
-            #     form= TruckForm(request.POST, instance=truck)
-            #     if form.is_valid():
-            #         form.save()
-            #         return redirect('truckregister:index')
-            # context={'form':form,'item':truck}
-            # return render(request,'truckregister/home.html',context)    
+   
 
+@login_required(login_url='login')
 def deleteTruckView(request, pk):
     truck = Truck.objects.get(id=pk)
    
     if request.method=='POST':
         truck.delete()
         return redirect('truckregister:index') 
-
-    return redirect(request, 'truckregister/home.html')
+    return redirect(request,'truckregister:index')  
+    # return redirect(request, 'truckregister/home.html')
      
 def editOdometerView(request, pk):
     
     truck = Truck.objects.filter(id=pk)
-    odometer= request.POST.get('odometer')    
-    truck.update(odometer=odometer)
+    if request.method=='POST':
+        odometer= request.POST.get('odometer')    
+        truck.update(odometer=odometer)
+        return redirect('truckregister:index')
     return redirect('truckregister:index')
+    # return redirect(request, 'truckregister/home.html')
+
+@login_required(login_url='login')
+def addDriverView(request):
+    
+    form=DriverForm
+    print('Entered add Driver')
+    # truck = Driver.objects.get
+    if request.method == 'POST':
+        print('Entered POST')
+        form = DriverForm(request.POST)
+        if form.is_valid():
+            print('form valid')
+            form.save()
+            return redirect('truckregister:index')
+    context = {'form':form}
+
+    
+    return render (request, 'truckregister/add_driver.html',context)
         
 
 
-
-
-# def updateTruckView(request, pk):
-#     truck = Truck.objects.get(id=pk)
-#     form = TruckForm(instance=truck)
+def addFieldView(request,name):
     
-#     if request.method == 'POST':
-#         form = TruckForm(request.POST,instance=truck)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('truckregister:index') 
+    fieldstypes= getFieldTypesList()
+    if request.method=='POST':
+        url = str(request.path).split('/')
+        modelname = url[len(url)-1]
+        model = getModelbyName(modelname)
+        newfield =createFieldForNewColumn(request.POST.get('field'),request.POST['datatype'],model)
+        
+        addNewColumnInDB(model,newfield
+)
+    updateModels()
+    context={'model':name,'types':fieldstypes}
+    return render(request, 'truckregister/createField.html',context)
 
-#     context = {'form': form} 
-#     return render (request, 'truckregister/update_truck.html',context)
+def createRecordView(request, name):
+    
+#     # print('before form')
+    for item in request.GET.items():
+        print(item)
+    context={}
+    
+    
+    model=getModelbyName(name)
+
+    # form=form(request.POST)
+    if name== "driver":        
+        if request.method == 'POST':  
+            form= recordDriverForm(request.POST)   
+            if form.is_valid():
+                form.save()                 
+                return redirect('index')
+            else:
+                context={'form':form,'name':name}
+                return render(request,'truckregister/addRecord.html',context)
+        form= recordDriverForm() 
+        context={'form':form,'name':name}
+
+    else:
+        if request.method == 'POST':  
+            form= recordTruckForm(request.POST)   
+            if form.is_valid():
+                form.save()                 
+                return redirect('index')
+            else:
+                context={'form':form,'name':name}
+                return render(request,'truckregister/addRecord.html',context)
+        form= recordTruckForm()
+        context={'form':form,'name':name}
 
 
-# def deleteTruckView(request, pk):
-#     truck = Truck.objects.get(id=pk)
-#     context={'item':truck} 
-#     if request.method=='POST':
-#         truck.delete()
-#         return redirect('truckregister:index') 
+    return render(request,'truckregister/addRecord.html',context)
 
-#     return render(request, 'truckregister/delete_truck.html', context)
+

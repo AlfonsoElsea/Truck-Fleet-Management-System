@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'truckregister.apps.TruckregisterConfig',
     'usersmanagement.apps.UsersmanagementConfig',
+    'authenticate',
 ]
 
 MIDDLEWARE = [

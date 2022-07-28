@@ -1,4 +1,5 @@
-{% extends "truckregister/base.html" %}
+{% extends "truckregister/index.html" %}
+
 {% load static%}
 {% block content %}
 
@@ -6,7 +7,7 @@
 <div class="row" >
 <!-- Cards for summaries -->
     <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-4">
+        <div class="card bg-primary text-white mb-4 ">
             <div class="card-body">Trucks</div>
             <div class="card-footer d-flex align-items-center justify-content-between">
                 {{list_of_trucks.count}}
@@ -51,16 +52,17 @@
 <div class="row">
 
 <!-- drivers table -->
-    <div class= "col-5">
-        <div class="card mb-4">
-        <div class="card-header">Drivers Details</div>
+    <div class= "col-5 ">
+        <div class="card mb-4 shadow p-3  bg-white rounded">
+            <div class="card-header">Drivers Details</div>
             <div class="card-body">
-
+<div class="table-responsive">
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Last Name</th>
                         <th scope="col">License Number</th>
                         <th scope="col">Truck</th>
                         
@@ -73,6 +75,7 @@
 
                         <th scope="row">{{ forloop.counter }}</th>
                         <td scope="row">{{driver.name}}</td>
+                        <td scope="row">{{driver.last_name}}</td>
                         <td scope="row">{{driver.license_number}}</td>
                         <td scope="row">{{driver.truck}}</td>          
                         
@@ -80,6 +83,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+</div>
             </div>
         </div>
     </div>
@@ -89,10 +93,10 @@
 
 {% comment %} Start of TRuck table {% endcomment %}
     <div class= "col-7">
-        <div class="card">
-        <div class="card-header">Trucks Details</div>
+        <div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-header">Trucks Details</div>
             <div class="card-body">
-
+<div class="table-responsive">
                 <table class="table">
                     <thead class="table-dark">
                         <tr>
@@ -131,7 +135,7 @@
                             <img src="{% static 'truckregister/images/icon-yes.svg'%}">
                             {% endif %}
                         </td>
-                        <td scope="row"><a href="{% url 'truckregister:update_truck' truck.id %}"  data-bs-toggle="modal" data-bs-target="#editTruck-{{forloop.counter}}"><img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a>
+                        <td scope="row"><a href=""  data-bs-toggle="modal" data-bs-target="#editTruck-{{truck.id}}"><img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a>
                             <a href="{% url 'truckregister:delete_truck' truck.id %}" data-bs-toggle="modal" data-bs-target="#deleteTruck-{{forloop.counter}}" ><img src="{% static 'truckregister/images/icon-deletelink.svg'%}"></a>
                         </td>
                         
@@ -139,7 +143,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-        
+</div>
             </div>
         </div>
     </div>
@@ -151,7 +155,7 @@
 {% for truck in list_of_trucks %}
   
   <!-- Modal edit truck -->
-  <div class="modal fade" id="editTruck-{{forloop.counter}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade " id="editTruck-{{truck.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <form action="{% url 'truckregister:update_truck' truck.id %}" method="post">
@@ -261,7 +265,59 @@
   
   {% endfor %}
 
+  <!-- Modal new truck -->
+  <div class="modal fade " id="addTruck" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="{% url 'truckregister:add_truck'  %}" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add Truck</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <div class="modal-body">
+                {{truckform.as_p}}
+              
+            
+            
+            </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-primary" value="Save"></button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!--End  Modal new truck -->
 
+<!-- Modal new driver -->
+  <div class="modal fade " id="addDriver" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="{% url 'truckregister:add_driver'  %}" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add Driver</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+            <div class="modal-body">
+                {{driverForm.as_p}}
+              
+            
+            
+            </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-primary" value="Save"></button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!--End  Modal new Driver -->
 
 
 

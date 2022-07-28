@@ -1,26 +1,8 @@
-from .models import Truck, Driver
-from attr import fields
+from .models import Truck, Driver, updateModels
+from attr import attr, fields
 from django import forms
 
-
-from truckregister.models import Truck
-
-# class TruckForm(forms.ModelForm):    
-#     # odometer= forms.IntegerField()
-    
-#     class Meta:
-#         model = Truck
-#         fields = ('odometer',)
-#         labels={
-#             'odometer':'',
-#         }
-            
-        
-
-#         widgets={
-#             'odometer':forms.NumberInput(attrs={'class':'form-control','placeholder': 'Odometer'}),
-#         }
-
+updateModels()
 class TruckForm(forms.ModelForm):
     class Meta:
         model = Truck
@@ -45,4 +27,36 @@ class TruckForm(forms.ModelForm):
             'miles_for_maintenance':forms.NumberInput(attrs={'class':'form-control','placeholder':'Miles for Maintenance'}),
             
             }
+
+class DriverForm(forms.ModelForm):
+    class Meta:
+        model= Driver
+        exclude=()
+        labels= {
+           'name':'',
+           'last_name':'',
+           'license_number':'',
+           
+        }
+
+        widgets={
+            'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}),
+            'last_name':forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name'}),
+            'license_number':forms.NumberInput(attrs={'class':'form-control', 'placeholder': 'License'}),
+            'truck':forms.Select(attrs={'class':'form-control','placeholder':'Truck'}),
+        }
+
+postinline=forms.inlineformset_factory(Truck, Driver, form=DriverForm, extra=1)
+
+
+     
+class recordTruckForm(forms.ModelForm):
+    class Meta:
+        model = Truck
+        fields = '__all__'
+
+class recordDriverForm(forms.ModelForm):
+    class Meta:
+        model = Driver
+        fields = '__all__'
 

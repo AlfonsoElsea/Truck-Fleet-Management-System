@@ -11,7 +11,7 @@ class TruckAdmin(admin.ModelAdmin):
 
 
 class DriverAdmin(admin.ModelAdmin):
-    list_display = ('name','license_number', 'truck')
+    list_display = ('name','last_name','license_number', 'truck')
 
 admin.site.register(Truck, TruckAdmin)
 admin.site.register(Driver,DriverAdmin)

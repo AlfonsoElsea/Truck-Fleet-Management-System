@@ -1,0 +1,85 @@
+{% extends "truckregister/base.html" %}
+{% load static %}
+{% block content %}
+
+
+    <h1>List of trucks</h1>
+
+
+    {% if list_of_trucks %}
+
+    <div class="card-group">
+        
+
+        {% for truck in list_of_trucks %}
+            <div class="card text-bg-dark mb-3" style="width: 18rem;">
+                <div class="card-body">
+                    
+                    <h5 class="card-title">Brand: {{ truck.brand}}</h5>
+                    <p class="card-text">Model: {{ truck.model}}</p>
+                    <p class="card-text">Year: {{ truck.year}}</p>
+                    <p class="card-text">Color: {{ truck.color}}</p>
+                    <p class="card-text">Licence Number: {{ truck.truck_license_number}}</p>
+                    <p class="card-text">Odometer: {{ truck.odometer}}</p>
+                    <p class="card-text">To maintenance: {{ truck.to_maintenance}}</p>
+                    <p class="card-text"> 
+                    {% if truck.Needs_maintenace %}
+                            
+                                <small class="text-muted" > 
+                                <img src= "{% static 'truckregister/images/maintenance_needed.png' %}" width="25" height="25">
+                                <a href="#" data-title="Update Odometer" >
+                                    Needs to plan the maintenance
+                                </a>
+                                </small>
+                            
+                        </i>                   
+                    {% else %}
+                        
+                            <small class="text-muted">
+                            <img src= "{% static 'truckregister/images/correct.png' %}" width="25" height="25">
+
+                                It's fine
+                            </small>
+                        
+                    {% endif %}
+                    
+                
+                </p>
+                    <a href="{% url 'truckregister:detail' truck.id %}"  class="btn btn-primary">Odometer</a>
+                    <a href="{% url 'truckregister:update_truck' truck.id %}"  class="btn btn-primary">Update</a>
+                    <a href="{% url 'truckregister:delete_truck' truck.id %}"  class="btn btn-primary">Delete</a>
+
+                </div>
+            </div>
+            {% endfor%}
+            
+    </div>
+
+    {% else %}
+        <p>No trucks available</p>
+    {% endif %}
+{% comment %}     
+        <ul>
+            {% for truck in list_of_trucks %}
+                <li><a href="{% url 'truckregister:detail' truck.id %}">{{truck }}</a> 
+               
+                {% if truck.Needs_maintenace %}
+                 <i >   <img src= "{% static 'truckregister/images/maintenance_needed.png' %}" width="50" height="50">
+                    <div class="alert alert-danger" role="alert" >
+                    Needs to plan the maintenance
+                    </div> 
+                    </i>                   
+                {% else %}
+                    <img src= "{% static 'truckregister/images/correct.png' %}" width="25" height="25">
+              <div class="alert alert-success" role="alert">
+                    It's fine
+                    </div>   
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No trucks available</p>
+    {% endif %} {% endcomment %}
+
+{% endblock  %}

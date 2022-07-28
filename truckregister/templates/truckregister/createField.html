@@ -1,0 +1,99 @@
+{% extends "truckregister/index.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <div class="form-group" >
+                <legend>New Field Parameters {{model}}</legend>
+
+
+                <form action="" method="POST">
+                {% csrf_token %}
+                <p>
+                    <div class="form-check">
+                    <label for="column" class="form-label"  size="10">Column</label>
+                    <input id="column" name="column">
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                    <label for="fieldname"  class="form-label"  size="20">Field Name</label>
+                    <input id="fieldname" name="field">
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                        <label for="displayName" class="form-label" size="20"> Displayed Name</label>
+                        <input id="displayName">
+
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                        <label for="length" class="form-label" size="3">Field Length</label>
+                        <input id="length" type="number">
+                    
+
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                    <input id="unique" type="checkbox" class="form-check-input"> 
+                    <label for="unique" class="form-check-label">Is Unique?</label>
+
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                        <input id="blank" type="checkbox" class="form-check-input">
+                        <label for="blank" class="form-check-label">Can be Blank?</label>
+
+
+                    </div>
+                </p>
+                <p>
+                    <div class="form-check">
+                    <input id="null" type="checkbox" class="form-check-input"> 
+                    <label for="null" class="form-check-label">Can be Null?</label>
+
+
+                    </div>
+                </p>
+                <p>
+                    <div class="form-control">
+                    <select class="form-option" name="datatype" id="datatype">
+                    
+                       {% for type in types %}
+                       {% if type == 'VARCHAR' %}
+                       <option selected value={{type}}>{{type}}</option>
+                       {% else %}
+                       <option value={{type}}>{{type}}</option>
+                       {% endif %}
+                       
+                       
+                       {% endfor %}
+                    </select>
+                    
+                    </div>
+                </p>
+        
+                <p>
+                    <input type="submit" value="save" class="btn btn-secondary">
+                </p>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+        
+        
+
+
+
+{% endblock %}
+
