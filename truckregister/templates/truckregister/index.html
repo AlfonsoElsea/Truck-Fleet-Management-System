@@ -53,14 +53,13 @@
                             </a>
                             <div class="collapse" id="collapseLayoutsTrucks" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                 <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#addTruck">
+                                <a class="nav-link" href="{% url 'truckregister:addrecord' 'truck' %}">
                                 <div class="sb-nav-link-icon" ><i class="fas fa-truck"></i></div>
                                 Add Truck
                                 </a>
-                                     <a class="nav-link" href="{% url 'truckregister:addfield' 'truck'%}"> 
-                                      <div class="sb-nav-link-icon" ><i class="fas fa-plus"></i></div> Add Field</a>
-                                    <a class="nav-link" href="{% url 'truckregister:addrecord' 'truck' %}">
-                                     <div class="sb-nav-link-icon" ><i class="fas fa-clipboard-list"></i></div>Add Record</a>
+                                <a class="nav-link" href="{% url 'truckregister:addfield' 'truck'%}"> 
+                                <div class="sb-nav-link-icon" ><i class="fas fa-plus"></i></div> Add Field</a>
+                                    
                                 </nav>
                             </div>
 
@@ -72,16 +71,13 @@
                             </a>
                             <div class="collapse" id="collapseLayoutsDrivers" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                      <a class="nav-link" href="" data-bs-toggle="modal" data-bs-target="#addDriver">
-                                        <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
-                                        Add Driver
-                                     </a>
+                                      <a class="nav-link" href="{% url 'truckregister:addrecord' 'driver' %}">
+                                     <div class="sb-nav-link-icon" ><i class="fas fa-clipboard-list"></i></div>Add Driver</a>
                             
                             
                                     <a class="nav-link" href="{% url 'truckregister:addfield' 'driver'%}">
                                      <div class="sb-nav-link-icon" > <i class="fas fa-plus"></i></div>Add Field</a>
-                                    <a class="nav-link" href="{% url 'truckregister:addrecord' 'driver' %}">
-                                     <div class="sb-nav-link-icon" ><i class="fas fa-clipboard-list"></i></div>Add Record</a>
+                                    
                                 </nav>
                             </div>
 
@@ -138,7 +134,7 @@
             var form_fields = document.getElementsByTagName('input')
             var count =0
             for (var field in form_fields){
-                if (form_fields[field].type!="submit") {
+                if (form_fields[field].type!="submit" && form_fields[field].className != 'form-control'  ) {
                 form_fields[field].className+='form-control'
                 if (count<=0) {
                     count++
@@ -147,6 +143,20 @@
                     
                         form_fields[field].placeholder=form_fields[field].name
 
+                    }
+                }
+                
+            }
+
+
+            var modals = document.getElementsByTagName('a')
+            var count =0
+            for (var modal in modals) {
+                if(modals[model].id == count)
+                {
+                    modals[model].onclick=function()
+                    {
+                        "{% url 'truckregister:update_truck' 1 %}"
                     }
                 }
                 

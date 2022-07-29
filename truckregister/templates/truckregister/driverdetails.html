@@ -1,0 +1,26 @@
+{% extends "truckregister/index.html" %}
+{% load static %}
+{% block content %}
+
+
+<h3></h3>
+
+<div class="col-xl-12 col-md-24 d-flex justify-content-center">
+    <div class="card mb-4 shadow p-3  bg-white rounded">
+        <div class="card-header">Driver Details</div>
+        <div class="card-body ">
+            <p>Name:          {{object.name}}</p> <br>
+            <p>Last Name:          {{object.last_name}}</p><br>
+            <p>License Number: {{object.license_number}}</p><br>
+            <p>Truck:      {{object.truck}}</p><br>
+        </div>
+        <div class="card-footer ">
+            <a href="{% url 'truckregister:index'%}" class="btn btn-primary"> Back</a>
+            <a href="{% url 'truckregister:driver_update' object.id %}" class="btn btn-secondary"  >Edit</a>
+            <a href="{% url 'truckregister:driver_delete' object.id %}" class="btn btn-warning" >Delete</a>
+            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        </div>
+    </div>
+</div> 
+    
+{% endblock  %}

@@ -4,63 +4,60 @@
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
+        <div class="col-xl-12 col-md-24 d-flex justify-content-center">
+    <div class="card mb-4 shadow p-3  bg-white rounded">
+        <div class="card-header"><legend>New Field for {{model|capfirst}}</legend></div>
+        <div class="card-body ">
+
             <div class="form-group" >
-                <legend>New Field Parameters {{model}}</legend>
+                
 
 
                 <form action="" method="POST">
                 {% csrf_token %}
-                <p>
+                
                     <div class="form-check">
                     <label for="column" class="form-label"  size="10">Column</label>
-                    <input id="column" name="column">
+                    <input id="column" name="DB column name">
                     </div>
-                </p>
-                <p>
+                
                     <div class="form-check">
                     <label for="fieldname"  class="form-label"  size="20">Field Name</label>
-                    <input id="fieldname" name="field">
+                    <input id="fieldname" name="Field">
                     </div>
-                </p>
-                <p>
+                
                     <div class="form-check">
                         <label for="displayName" class="form-label" size="20"> Displayed Name</label>
-                        <input id="displayName">
+                        <input id="displayName" name="Displayed Name"  placeholder= "Displayed Name">
 
                     </div>
-                </p>
-                <p>
-                    <div class="form-check">
+                <div class="form-check">
                         <label for="length" class="form-label" size="3">Field Length</label>
-                        <input id="length" type="number">
+                        <input id="length" type="number" name="Number of characters">
                     
 
                     </div>
-                </p>
-                <p>
+                
                     <div class="form-check">
                     <input id="unique" type="checkbox" class="form-check-input"> 
                     <label for="unique" class="form-check-label">Is Unique?</label>
 
                     </div>
-                </p>
-                <p>
+               
                     <div class="form-check">
                         <input id="blank" type="checkbox" class="form-check-input">
                         <label for="blank" class="form-check-label">Can be Blank?</label>
 
 
                     </div>
-                </p>
-                <p>
+                
                     <div class="form-check">
                     <input id="null" type="checkbox" class="form-check-input"> 
                     <label for="null" class="form-check-label">Can be Null?</label>
 
 
                     </div>
-                </p>
-                <p>
+                
                     <div class="form-control">
                     <select class="form-option" name="datatype" id="datatype">
                     
@@ -76,12 +73,24 @@
                     </select>
                     
                     </div>
-                </p>
+                
         
-                <p>
-                    <input type="submit" value="save" class="btn btn-secondary">
-                </p>
+        
+        <br>
+         
+          <a href="{% url 'truckregister:index' %}" class="btn btn-secondary">Back</a>
 
+                    <input type="submit" value="Save" class="btn btn-primary">
+
+       
+        </div>
+     
+        </div>
+          
+                
+                  
+                
+ </div>
 
                 </form>
             </div>

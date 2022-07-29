@@ -1,0 +1,13 @@
+{% extends "truckregister/index.html" %}
+{% load static%}
+{% block content %}
+<h3>Driver Edit</h3>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" class="btn btn-primary" value="Save">
+    <a href="{% url 'truckregister:index' %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+
+{% endblock %}

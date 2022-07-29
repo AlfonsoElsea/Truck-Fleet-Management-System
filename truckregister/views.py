@@ -1,9 +1,10 @@
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from requests import request
 from .models import Truck, Driver, addNewColumnInDB, createFieldForNewColumn, getFieldTypesList, getModelbyName, updateModels
 from django.views import generic
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView,FormView
 from .forms import  DriverForm, TruckForm, recordDriverForm, recordTruckForm
 from django.contrib.auth.decorators import login_required
@@ -31,27 +32,73 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self) :
         return Truck.objects.all()
 
-class DetailView(LoginRequiredMixin,generic.DetailView):
+class TruckDetailView(LoginRequiredMixin,DetailView):
     login_url='login'
 
     model= Truck
     template_name = 'truckregister/truckdetails.html'
 
+
+class DriverDetailView(LoginRequiredMixin,DetailView):
+    login_url='login'
+
+    model= Driver
+    template_name = 'truckregister/driverdetails.html'
+
 @login_required(login_url='login')
 def TruckView(request, truck_id): 
     
-    Truck.objects.filter(pk=truck_id)
+    obj=Truck.objects.filter(pk=truck_id)
+    
     
     # truck.update(milesodometer=miles+int(odometer))
     return HttpResponseRedirect(reverse('truckregister:truck',args=(truck_id,)))
 
-class TruckUpdateView(LoginRequiredMixin,CreateView):
+class TruckUpdateView(LoginRequiredMixin,UpdateView):
     login_url='login'
-
+    
     model = Truck
     form_class = TruckForm
-    template_name = "truckregister/truck_form.html"
+    template_name = "truckregister/update.html"
     
+
+    # def post(self, request, *args, **kwargs):
+    #     prev=request.META.get('HTTP_REFERER','/')
+    #     kwargs['prev']=prev
+    #     self.success_url=prev
+    #     print(prev)
+    #     return super().get(request, *args, **kwargs)
+
+    # def get(self, request, *args, **kwargs) :
+        
+        
+        
+    #     return super().get(request, *args, **kwargs)
+
+
+class DriverUpdateView(LoginRequiredMixin,UpdateView):
+    login_url='login'
+    
+    model = Driver
+    form_class = DriverForm
+    template_name = "truckregister/update.html"
+    success_url = '/'
+
+    # def post(self, request, *args, **kwargs):
+    #     super().post(request, *args, **kwargs)
+    #     prev=request.POST.get('next','/')
+    #     return HttpResponseRedirect(prev) 
+
+class DriverDeleteview(LoginRequiredMixin,DeleteView):
+    login_url='login'
+    model = Driver
+    form_class = DriverForm
+    template_name = "truckregister/delete_driver.html"
+    success_url = '/'
+
+
+
+
 @login_required(login_url='login')
 def ProvidersView(request):
     return  render(request, "truckregister/providers.html")
@@ -76,7 +123,11 @@ def addTruckView(request):
 @login_required(login_url='login')
 def updateTruckView(request, pk):
             trucks = Truck.objects.all()
-            context={'list_of_trucks':trucks}
+            truck =Truck.objects.filter(id=pk)
+            form= TruckForm(instance= truck)
+            print(truck)
+            context={'list_of_trucks':trucks,'truckform':form}
+            
             if request.method == 'POST':
                 brand=request.POST.get('brand')
                 model=request.POST.get('model')
@@ -97,7 +148,8 @@ def updateTruckView(request, pk):
                 truck.save()
                
                 return redirect('truckregister:index')
-            return redirect(request,'truckregister/home.html', context)
+            # return redirect(request,'truckregister/home.html', context)
+            return redirect('truckregister:index')
 
    
 

@@ -1,19 +1,26 @@
 {% extends "truckregister/index.html" %}
 
 {% block content %}
+<div class="col-xl-12 col-md-24 d-flex justify-content-center">
+    <div class="card mb-4 shadow p-3  bg-white rounded">
+        <div class="card-header"><legend>Add a new {{name}}</legend></div>
+        <div class="card-body ">
 
-<legend>Add a new {{name}}</legend>
-   <div class="form-group" >
+        <div class="form-group" >
 
         <form action="" method="post">
             {% csrf_token %}
             {{form.as_p}}
          <br>
+         </div>
+            <a href="{% url 'truckregister:index' %}" class="btn btn-secondary">Back</a>
+
             <input type="submit" value="Save" class="btn btn-primary">
             <input type="hidden" name="Name" value={{name}}>
         </form>
-   
     </div>
+    </div>
+</div>
 {% endblock %}
 
 

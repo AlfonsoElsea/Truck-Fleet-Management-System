@@ -59,7 +59,7 @@ class Truck(models.Model):
 
     
     def get_absolute_url(self):
-        return reverse('truck', kwargs={'pk':self.pk})
+        return reverse('truckregister:truck_detail', kwargs={'pk':self.pk})
     
 
     
@@ -72,7 +72,7 @@ class Driver(models.Model):
     def __str__(self) -> str:
         return self.name + " Drives a "+ self.truck.brand
 
-
+        
 
 # Get tables descriptions
 def getTableFromModel(model):

@@ -7,14 +7,14 @@ class TruckForm(forms.ModelForm):
     class Meta:
         model = Truck
         fields= '__all__'
-        labels={'brand':'',
-        'model':'',
-        'year':'',
-        'color':'',
-        'truck_license_number':'',
-        'odometer':'',
-        'miles_for_maintenance':'',
-        }
+        # labels={'brand':'',
+        # 'model':'',
+        # 'year':'',
+        # 'color':'',
+        # 'truck_license_number':'',
+        # 'odometer':'',
+        # 'miles_for_maintenance':'',
+        # }
 
 # {brand, model, year,color, truck_license_number,odometer,miles_for_maintenance}
         widgets={

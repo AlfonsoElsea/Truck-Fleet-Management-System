@@ -52,7 +52,7 @@
 <div class="row">
 
 <!-- drivers table -->
-    <div class= "col-5 ">
+    <div class= " ">
         <div class="card mb-4 shadow p-3  bg-white rounded">
             <div class="card-header">Drivers Details</div>
             <div class="card-body">
@@ -74,7 +74,13 @@
                         <tr>
 
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td scope="row">{{driver.name}}</td>
+                        
+                        <td scope="row">
+                          <a href="{% url 'truckregister:driver_detail' driver.id %}"  >
+                        {{driver.name}}
+                          </a>
+                        </td>
+                        
                         <td scope="row">{{driver.last_name}}</td>
                         <td scope="row">{{driver.license_number}}</td>
                         <td scope="row">{{driver.truck}}</td>          
@@ -89,10 +95,11 @@
     </div>
     
 <!-- End of drivers table -->
+</div>
 
-
+<div class="row">
 {% comment %} Start of TRuck table {% endcomment %}
-    <div class= "col-7">
+    <div class= "">
         <div class="card shadow p-3 mb-5 bg-white rounded">
             <div class="card-header">Trucks Details</div>
             <div class="card-body">
@@ -116,14 +123,23 @@
                         {% for truck in list_of_trucks %}
                         <tr>
 
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td scope="row">{{truck.brand}}</td>
+                        <th scope="row">
+                        <a href="{% url 'truckregister:truck_detail' truck.id %}" id={{forloop.counter}} >
+                        {{ forloop.counter }}
+                        </a>
+                        </th>
+                        <td scope="row">
+                        <a href="{% url 'truckregister:truck_detail' truck.id %}" id={{forloop.counter}} >
+
+                        {{truck.brand}}
+                        </a>
+                        </td>
                         <td scope="row">{{truck.model}}</td>
                         <td scope="row">{{truck.year}}</td>
                         <td scope="row">{{truck.color}}</td>
                         <td scope="row">{{truck.truck_license_number}}</td>
                         <td scope="row">{{truck.odometer}}
-                        <a href="{% url 'truckregister:edit_odometer' truck.id %}"  data-bs-toggle="modal" data-bs-target="#edit_odometer-{{forloop.counter}}">
+                        <a href=""  data-bs-toggle="modal" data-bs-target="#edit_odometer-{{forloop.counter}}">
                         <img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a>
                         </td>
                         <td scope="row">
@@ -135,7 +151,11 @@
                             <img src="{% static 'truckregister/images/icon-yes.svg'%}">
                             {% endif %}
                         </td>
-                        <td scope="row"><a href=""  data-bs-toggle="modal" data-bs-target="#editTruck-{{truck.id}}"><img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a>
+                        <td scope="row">
+                        <a href="{% url 'truckregister:truck_update' truck.id %}" id={{forloop.counter}} >
+                            <img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a>
+                            {% comment %} <a href="{% url 'truckregister:truck' truck.id %}" id={{forloop.counter}}  data-bs-toggle="modal" data-bs-target="#editTruck-{{truck.id}}">
+                            <img src="{% static 'truckregister/images/icon-changelink.svg'%}"></a> {% endcomment %}
                             <a href="{% url 'truckregister:delete_truck' truck.id %}" data-bs-toggle="modal" data-bs-target="#deleteTruck-{{forloop.counter}}" ><img src="{% static 'truckregister/images/icon-deletelink.svg'%}"></a>
                         </td>
                         
@@ -165,7 +185,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <div class="modal-body">
-                <div class="form-group">
+
+            {{truckform.as_p}}
+                {% comment %} <div class="form-group">
                     <label for="">Brand</label>
                     <input name="brand" value="{{truck.brand}}" type="text" class="form-control" required>
                 </div>
@@ -193,7 +215,7 @@
                     <label for="">Miles for Maintenance</label>
                     <input name="maintenance" value="{{truck.miles_for_maintenance}}" type="text" class="form-control" required>
                 </div>
-              
+               {% endcomment %}
             
             
             </div>

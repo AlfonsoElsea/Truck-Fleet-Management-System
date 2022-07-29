@@ -1,0 +1,25 @@
+{% extends "truckregister/index.html" %}
+{% load static%}
+{% block content %}
+<div class="col-xl-12 col-md-24 d-flex justify-content-center ">
+
+    <div class="card shadow p-3 mb-5 bg-white rounded ">
+        <div class="card-header">Your about to delete an element!!</div>
+        <div class="card-body">
+            <p> Are you sure you want to delete: {{object.name}}</p>
+            <form action= "" method=POST >
+            {% csrf_token %}
+        </div>
+        <div class="card-footer ">
+
+            <a href="{% url 'truckregister:index' %}" class="btn btn-secondary" >Cancel</a>
+            <input type='submit' class="btn btn-warning" value='Confirm'>
+            </form>
+        
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

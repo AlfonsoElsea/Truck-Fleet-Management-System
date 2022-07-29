@@ -1,16 +1,28 @@
-{% extends "truckregister/base.html" %}
+{% extends "truckregister/index.html" %}
+{% load static %}
 {% block content %}
 
 
-<form action="{% url 'truckregister:truck' truck.id %}" method = "POST">
-    {% csrf_token %}
-    <fieldset>
-        	<legend>
-                <h1> {{truck.trucklicensenumber}}</h1>
-                <input type="text" name="odometer" id=truck{{truck.trucklicensenumber}} >
-                <label for=truck{{truck.trucklicensenumber}}>{{truck.brand}}{{truck.model}} {{truck.trucklicensenumber}}</label>
-            </legend>
-    </fieldset>
-    <button type="submit" value="Accept" class= "btn btn-secondary">Save</button>
+<h3></h3>
 
+<div class="col-xl-12 col-md-24 d-flex justify-content-center">
+    <div class="card mb-4 shadow p-3  bg-white rounded">
+        <div class="card-header">Truck Details</div>
+        <div class="card-body ">
+            <p>Brand:          {{object.brand}}</p> <br>
+            <p>Model:          {{object.model}}</p><br>
+            <p>License Number: {{object.truck_license_number}}</p><br>
+            <p>Odormeter:      {{object.odometer}}</p><br>
+        </div>
+        <div class="card-footer ">
+            <input type="hidden" name="next" value="{{ request.path }}">
+
+            <a href="{% url 'truckregister:index'%}" class="btn btn-primary"> Back</a>
+            <a href="{% url 'truckregister:truck_update' object.id %}" class="btn btn-secondary"  >Edit</a>
+            <a href="{% url 'truckregister:delete_truck' object.id %}" class="btn btn-warning" >Delete</a>
+            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+        </div>
+    </div>
+</div> 
+    
 {% endblock  %}
