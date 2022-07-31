@@ -50,7 +50,11 @@
 
 
 <div class="row">
-
+{% for message in messages %}
+            <div class="mt-4 alert alert-primary alert-dismissible fade show text-center {{message.tags}}" role="alert">{{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-lable="Close"></button>
+            </div>
+            {% endfor %}
 <!-- drivers table -->
     <div class= " ">
         <div class="card mb-4 shadow p-3  bg-white rounded">
@@ -103,6 +107,7 @@
         <div class="card shadow p-3 mb-5 bg-white rounded">
             <div class="card-header">Trucks Details</div>
             <div class="card-body">
+            
 <div class="table-responsive">
                 <table class="table">
                     <thead class="table-dark">

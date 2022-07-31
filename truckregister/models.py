@@ -65,9 +65,8 @@ class Truck(models.Model):
     
 class Driver(models.Model):
     name             = models.CharField(max_length=50)
-    last_name        =  models.CharField(max_length=20)
     license_number   = models.IntegerField()
-    truck            = models.ForeignKey(Truck, on_delete=models.SET_NULL, null=True)
+    truck            = models.ForeignKey(Truck, on_delete=models.SET_NULL, null=True, blank= True)
 
     def __str__(self) -> str:
         return self.name + " Drives a "+ self.truck.brand
@@ -94,6 +93,7 @@ def getFieldTypes():
     ft =  MySQLdb.constants.FIELD_TYPE
     return {getattr(ft,k):k for k in dir(ft) if not k.startswith('_')}
 
+#Get a list of fieldtypes
 def getFieldTypesList():
     typelist=[]
     fieldtypes = getFieldTypes()
@@ -123,27 +123,24 @@ def createFieldForNewColumn(fieldname,fieldtype,model):
         if fieldtype=="LONG":
             newfield=models.IntegerField(fieldname,blank=True, null=True)
 
-            newfield.column=fieldname
-            newfield.attname=fieldname
-           
-
-           
         elif fieldtype=="VAR_STRING":
             newfield=models.CharField(fieldname,max_length=20,blank=True, null=True)
 
-            newfield.column=fieldname
-            newfield.attname=fieldname
         elif fieldtype=="LONGLONG":
             newfield=models.BigIntegerField(fieldname,blank=True, null=True)
 
-            newfield.column=fieldname
-            newfield.attname=fieldname
             
         elif fieldtype=="VARCHAR":
             newfield=models.CharField(verbose_name=fieldname, name=fieldname,max_length=20,blank=True, null=True,db_column=fieldname)
 
-            newfield.column=str(fieldname)
-            newfield.attname=fieldname
+            
+            
+        # elif fieldtype=="VARCHAR":
+        #     newfield=models.BooleanField(verbose_name=fieldname, name=fieldname,max_length=20,blank=True, null=True,db_column=fieldname)
+
+        newfield.column=str(fieldname)
+        newfield.attname=fieldname
+
         model.add_to_class(fieldname,newfield)
         
         # newfield.contribute_to_class(model,fieldname)
@@ -196,7 +193,7 @@ def updateModels(model=Driver,*args,**kargs):
         fields = getAllFieldsTable(model)
 
         modelfields= model._meta.get_fields()
-        print(modelfields)
+        # print(modelfields)
 
         fieldSet = {fieldField.name for fieldField in modelfields}
 

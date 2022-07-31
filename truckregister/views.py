@@ -1,3 +1,4 @@
+
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -9,6 +10,8 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView,FormVie
 from .forms import  DriverForm, TruckForm, recordDriverForm, recordTruckForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     login_url='login'
@@ -54,12 +57,13 @@ def TruckView(request, truck_id):
     # truck.update(milesodometer=miles+int(odometer))
     return HttpResponseRedirect(reverse('truckregister:truck',args=(truck_id,)))
 
-class TruckUpdateView(LoginRequiredMixin,UpdateView):
+class TruckUpdateView(LoginRequiredMixin,SuccessMessageMixin, UpdateView):
     login_url='login'
     
     model = Truck
     form_class = TruckForm
     template_name = "truckregister/update.html"
+    success_message= "Truck: %(brand)s succefully updated!"
     
 
     # def post(self, request, *args, **kwargs):
@@ -76,13 +80,14 @@ class TruckUpdateView(LoginRequiredMixin,UpdateView):
     #     return super().get(request, *args, **kwargs)
 
 
-class DriverUpdateView(LoginRequiredMixin,UpdateView):
+class DriverUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     login_url='login'
     
     model = Driver
     form_class = DriverForm
     template_name = "truckregister/update.html"
     success_url = '/'
+    success_message= "Driver: %(name)s succefully updated!"
 
     # def post(self, request, *args, **kwargs):
     #     super().post(request, *args, **kwargs)
@@ -196,14 +201,17 @@ def addDriverView(request):
 def addFieldView(request,name):
     
     fieldstypes= getFieldTypesList()
+    # fieldstypes = ['VARCHAR','LONGLONG','VAR_STRING']
     if request.method=='POST':
         url = str(request.path).split('/')
         modelname = url[len(url)-1]
         model = getModelbyName(modelname)
         newfield =createFieldForNewColumn(request.POST.get('field'),request.POST['datatype'],model)
-        
-        addNewColumnInDB(model,newfield
-)
+        print(model)
+        print(newfield)
+        addNewColumnInDB(model,newfield)
+        messages.success(request,"Field for "+ modelname+"created succefully")
+       
     updateModels()
     context={'model':name,'types':fieldstypes}
     return render(request, 'truckregister/createField.html',context)
