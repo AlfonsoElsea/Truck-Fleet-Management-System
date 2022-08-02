@@ -8,7 +8,11 @@
     <div class="card mb-4 shadow p-3  bg-white rounded">
         <div class="card-header"><legend>New Field for {{model|capfirst}}</legend></div>
         <div class="card-body ">
-
+{% for message in messages %}
+            <div class="mt-4 alert alert-primary alert-dismissible fade show text-center {{message.tags}}" role="alert">{{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-lable="Close"></button>
+            </div>
+            {% endfor %}
             <div class="form-group" >
                 
 

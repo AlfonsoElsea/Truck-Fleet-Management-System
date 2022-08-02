@@ -6,17 +6,17 @@
     <div class="card mb-4 shadow p-3  bg-white rounded">
         <div class="card-header">Edit item</div>
         <div class="card-body ">
-<form action="" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{form.as_p}}
         </div>
         <div class="card-footer ">
-    <input type="submit" class="btn btn-primary" value="Save">
-    <a href="{% url 'truckregister:index' %}" class="btn btn-secondary">Cancel</a>
+            <input type="submit" class="btn btn-primary" value="Save">
+            <a href="{% url 'truckregister:index' %}" class="btn btn-secondary">Cancel</a>
         </div>
-</form>
-        </div>
+            </form>
     </div>
 </div>
+
 
 {% endblock %}

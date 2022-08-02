@@ -4,6 +4,7 @@ from django.apps import AppConfig, apps
 from django.db import connection, models
 from django.contrib import admin
 from django.urls import reverse
+from pymysql import NULL
 
 from truckregister.apps import TruckregisterConfig
 # Camion
@@ -61,6 +62,11 @@ class Truck(models.Model):
     def get_absolute_url(self):
         return reverse('truckregister:truck_detail', kwargs={'pk':self.pk})
     
+    
+    def get_available_trucks():
+        return Truck.objects.exclude(
+    driver__in=Driver.objects.all(),)
+    
 
     
 class Driver(models.Model):
@@ -72,11 +78,18 @@ class Driver(models.Model):
         return self.name + " Drives a "+ self.truck.brand
 
         
+    def get_available_drivers():
+        return Driver.objects.filter(truck__isnull=True)
+    
+    def get_absolute_url(self):
+        return reverse('truckregister:driver_detail', kwargs={'pk':self.pk})
+    
 
-# Get tables descriptions
 def getTableFromModel(model):
     return str(__package__)+"_"+model.__name__
 
+
+# Get tables descriptions
 def tableDesc(table="testdynamic_driver"):
 
     @contextmanager
@@ -151,7 +164,6 @@ def createFieldForNewColumn(fieldname,fieldtype,model):
 
 def addNewColumnInDB(model,field):
        with connection.schema_editor() as shem:
-            
             shem.add_field(model,field)
 
 

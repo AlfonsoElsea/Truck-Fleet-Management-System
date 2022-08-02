@@ -2,6 +2,7 @@
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
+from pymysql import NULL
 from requests import request
 from .models import Truck, Driver, addNewColumnInDB, createFieldForNewColumn, getFieldTypesList, getModelbyName, updateModels
 from django.views import generic
@@ -19,11 +20,19 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'list_of_trucks'
     
     updateModels()
-
+  
+    
+   
 
     def get_context_data(self, **kwargs):
         context = super(generic.ListView, self).get_context_data(**kwargs)
         context['drivers_objects'] = Driver.objects.all()
+        avail_trucks= Truck.get_available_trucks()
+        avail_drivers= Driver.get_available_drivers()
+
+        context['avail_drivers']=avail_drivers
+    
+        context['avail_trucks']=avail_trucks
         truckform=TruckForm()
         driverForm=DriverForm()
         context['truckform']=truckform
@@ -201,19 +210,27 @@ def addDriverView(request):
 def addFieldView(request,name):
     
     fieldstypes= getFieldTypesList()
+    context={'model':name,'types':fieldstypes}
     # fieldstypes = ['VARCHAR','LONGLONG','VAR_STRING']
     if request.method=='POST':
         url = str(request.path).split('/')
         modelname = url[len(url)-1]
         model = getModelbyName(modelname)
         newfield =createFieldForNewColumn(request.POST.get('field'),request.POST['datatype'],model)
-        print(model)
+     
         print(newfield)
-        addNewColumnInDB(model,newfield)
-        messages.success(request,"Field for "+ modelname+"created succefully")
+        try:
+            addNewColumnInDB(model,newfield)
+            messages.success(request,"Field for "+ modelname+" created succefully")
+
+        except:
+            messages.warning(request, "Something went wrong, try again..")
+            return render(request, 'truckregister/createField.html',context)
+
+        return redirect('truckregister:index')
        
     updateModels()
-    context={'model':name,'types':fieldstypes}
+    
     return render(request, 'truckregister/createField.html',context)
 
 def createRecordView(request, name):

@@ -31,13 +31,7 @@ class TruckForm(forms.ModelForm):
 class DriverForm(forms.ModelForm):
     class Meta:
         model= Driver
-        exclude=()
-        labels= {
-           'name':'',
-           'last_name':'',
-           'license_number':'',
-           
-        }
+        fields= '__all__'
 
         widgets={
             'name':forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}),
